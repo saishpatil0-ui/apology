@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff5f8">
+<title>Hey You… 💗</title>
+<style>
+:root{--pink:#e86d96;--deep:#9e4168;--ink:#533748;--muted:#896b7b;--paper:#fffdfd}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:18px;background:linear-gradient(145deg,#fff1f5,#fff9f4 55%,#f8f0ff);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(#e5a5bd 1px,transparent 1px);background-size:22px 22px;opacity:.24}
+main{position:relative;width:min(520px,100%);min-height:550px;display:flex;align-items:center;justify-content:center}
+.card{width:100%;text-align:center;padding:clamp(25px,7vw,43px) clamp(20px,6vw,38px);background:#ffffffdf;border:1px solid #f3d8e2;border-radius:30px;box-shadow:0 22px 65px #9b53751a;backdrop-filter:blur(8px);animation:appear .45s ease}
+@keyframes appear{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.heart{font-size:3rem;line-height:1;margin-bottom:18px;animation:beat 1.5s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.small{color:#b16b88;font-size:.78rem;letter-spacing:.13em;text-transform:uppercase;font-weight:800}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(2.1rem,8vw,3.1rem);font-weight:500;line-height:1.08;letter-spacing:-.04em;margin:14px 0;color:#713e58}
+p{font-size:1rem;line-height:1.85;color:var(--muted);margin:13px 0}
+p strong{color:#6d4258}
+button{font:inherit;font-weight:750;border:0;border-radius:999px;padding:14px 22px;min-height:49px;cursor:pointer;transition:transform .18s,box-shadow .18s;background:linear-gradient(135deg,#ed84a7,#d85f8b);color:white;box-shadow:0 8px 20px #d85f8b35}
+button:hover{transform:translateY(-2px)}
+button:focus-visible{outline:3px solid #a94e73;outline-offset:4px}
+button.secondary{background:#fff5f8;color:#9e5272;border:1px solid #f0cdd9;box-shadow:none}
+.buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:25px}
+.hidden{display:none!important}
+.step-count{font-size:.8rem;color:#b18a9b;margin-top:23px}
+#forgiveBtn{min-width:210px}
+#finalMessage{font-size:1.08rem;color:#a04670;font-family:Georgia,serif}
+.sparkle{position:fixed;pointer-events:none;z-index:5;animation:pop 1.35s ease-out forwards}
+@keyframes pop{0%{opacity:0;transform:translateY(10px) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translateY(-100px) rotate(25deg) scale(1.2)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<section class="card" id="step1">
+  <div class="heart">💗</div>
+  <div class="small">just a little message for you</div>
+  <h1>Hey you…</h1>
+  <p>I have something from my heart to tell you. 🥺</p>
+  <p>No big speech. Just me, being honest with you.</p>
+  <div class="buttons"><button onclick="nextStep(2)">Okay, tell me… 💌</button></div>
+  <div class="step-count">1 of 3</div>
+</section>
+<section class="card hidden" id="step2">
+  <div class="heart">🥺</div>
+  <div class="small">from my heart</div>
+  <h1>I'm really sorry.</h1>
+  <p>I'm sorry for hurting you and for the way my words came out. <strong>I never meant to hurt you—not even a little.</strong></p>
+  <p>I was scared of losing you, and my feelings came out the wrong way. I wasn't trying to push you away. I just didn't know how to explain how much you mean to me.</p>
+  <p>I love you, I respect you, and I miss talking to you. I want us to talk, smile, understand each other, and feel happy together again. I know I can't fix everything with one “sorry,” but I truly want to do better.</p>
+  <p><strong>I'm sorry, from the bottom of my heart. Will you give me a chance to talk when you're ready? 💗</strong></p>
+  <div class="buttons"><button onclick="nextStep(3)">One last thing… 🫶</button></div>
+  <div class="step-count">2 of 3</div>
+</section>
+<section class="card hidden" id="step3">
+  <div class="heart" id="bigHeart">💞</div>
+  <div class="small">the tiny forgiveness mission</div>
+  <h1 id="forgiveTitle">Can you forgive me? 🥹</h1>
+  <p id="forgiveText">I'll ask nicely… and maybe a tiny bit dramatically. 😭💗</p>
+  <div class="buttons" id="forgiveButtons">
+    <button id="forgiveBtn" onclick="askForgiveness()">Please forgive me? 🥺</button>
+    <button class="secondary" onclick="needTime()">I need a little time</button>
+  </div>
+  <p id="finalMessage" class="hidden"></p>
+  <div class="buttons hidden" id="endingButtons">
+    <button onclick="celebrate()">Okay, let's talk 💗</button>
+    <button class="secondary" onclick="restart()">Read it again</button>
+  </div>
+  <div class="step-count" id="attemptCount">3 of 3 · forgiveness mission: 0/5</div>
+</section>
+</main>
+<script>
+let attempts=0;
+function nextStep(n){document.querySelectorAll('.card').forEach(x=>x.classList.add('hidden'));document.getElementById('step'+n).classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}
+const prompts=[
+["Please forgive me? 🥺","I'm really, really sorry. 💗"],
+["Pretty please? 🥹","I promise I'm trying to say this properly…"],
+["One tiny chance? 🫶","I miss our talks and our happy moments."],
+["Forgive this silly heart? 💞","My heart is holding a little sorry sign right now."],
+["One last time… please? 💗","I mean it with all my heart. No pressure—just love and honesty."]
+];
+function askForgiveness(){
+ attempts++;
+ const btn=document.getElementById('forgiveBtn');
+ const title=document.getElementById('forgiveTitle');
+ const txt=document.getElementById('forgiveText');
+ document.getElementById('attemptCount').textContent='forgiveness mission: '+Math.min(attempts,5)+'/5';
+ if(attempts<5){
+  title.textContent=prompts[attempts-1][0];
+  txt.textContent=prompts[attempts-1][1];
+  btn.textContent=['Pretty please? 🥺','Just one chance? 💗','I brought extra sorrys 😭','My heart says PLEASE 💞'][attempts-1];
+  btn.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:350});
+ }else{
+  title.textContent='You have my whole heart. 💗';
+  txt.classList.add('hidden');
+  document.getElementById('forgiveButtons').classList.add('hidden');
+  document.getElementById('finalMessage').textContent='I’m sorry, I love you, and I respect you. If you’re ready, can we leave the hurt behind little by little and start with one honest conversation? 🫶';
+  document.getElementById('finalMessage').classList.remove('hidden');
+  document.getElementById('endingButtons').classList.remove('hidden');
+  document.getElementById('attemptCount').textContent='mission complete · sending you a little love 💗';
+  celebrate();
+ }
+}
+function needTime(){
+ document.getElementById('forgiveTitle').textContent='That’s okay. 💗';
+ document.getElementById('forgiveText').textContent='Take the time you need. I’m sorry, I care about you, and I’ll respect your feelings. If you want to talk when you’re ready, I’ll be here to listen.';
+ document.getElementById('forgiveBtn').textContent='I understand 🫶';
+ document.getElementById('forgiveBtn').onclick=()=>{document.getElementById('forgiveText').textContent='No pressure. Sending you care, patience, and a little heart. 💗';popHearts();};
+}
+function popHearts(){for(let i=0;i<18;i++){let el=document.createElement('span');el.className='sparkle';el.textContent=['💗','💕','♡','✨','🌷'][i%5];el.style.left=(8+Math.random()*84)+'%';el.style.top=(55+Math.random()*35)+'%';el.style.fontSize=(18+Math.random()*20)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),1400);}}
+function celebrate(){popHearts();document.getElementById('bigHeart').textContent='💖';}
+function restart(){attempts=0;document.getElementById('forgiveTitle').textContent='Can you forgive me? 🥹';document.getElementById('forgiveText').textContent="I'll ask nicely… and maybe a tiny bit dramatically. 😭💗";document.getElementById('forgiveText').classList.remove('hidden');document.getElementById('forgiveButtons').classList.remove('hidden');document.getElementById('forgiveBtn').textContent='Please forgive me? 🥺';document.getElementById('forgiveBtn').onclick=askForgiveness;document.getElementById('finalMessage').classList.add('hidden');document.getElementById('endingButtons').classList.add('hidden');document.getElementById('attemptCount').textContent='3 of 3 · forgiveness mission: 0/5';nextStep(1);}
+</script>
+</body>
+</html>
